@@ -82,7 +82,7 @@ try:
 except Exception as e:
     logging.error(f"Error loading the model: {e}")
 
-past_100_days = tr_data.tail(100)
+past_100_days = pd.DataFrame(tr_data.tail(100))
 final_df = past_100_days.append(ts_data, ignore_index = True)
 input_data = scaler.fit_transform(final_df)
 x_test = []
