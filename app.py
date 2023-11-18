@@ -4,7 +4,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import streamlit as st
 import seaborn as sns
-
+import sklearn
 start = '2000-01-01'
 end = '2023-11-18'
 
@@ -42,7 +42,7 @@ ma200 = df['Close'].rolling(200).mean()  # Corrected
 fig1, ax1 = plt.subplots(figsize=(15, 9))
 ax1.plot(ma100, c='green', linewidth=2, label='100-day MA')  # Added label
 ax1.plot(ma200, c='blue', linewidth=2, label='200-day MA')  # Added label
-ax1.plot(df['Close'], c='navy', linewidth=2, label='Closing Price')  # Added label
+ax1.plot(df['Close'], c='navy', linewidth=2, label='Closing Price')
 
 # Set labels and ticks for ax1
 ax1.set_xlabel('Date', color='navy', fontweight='bold', size=18)
@@ -63,12 +63,15 @@ ax1.legend()
 
 st.pyplot(fig1)
 
-tr_data =  pd.DataFrame(df['Close'][0:int(len(df)*0.7)])
-ts_data = pd.DataFrame(df['Close'][int(len(df)*0.7):int(len(df))])
+tr_data = df['Close'][:int(len(df) * 0.7)].values.reshape(-1, 1)
+ts_data = df['Close'][int(len(df) * 0.7):].values.reshape(-1, 1)
+
+# Reshape to a 2D array as required by MinMaxScaler
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler(feature_range=(0, 1))
 tr_data_array = scaler.fit_transform(tr_data)
 ts_data_array = scaler.fit_transform(ts_data)
+
 
 from keras.models import load_model
 import logging
@@ -82,22 +85,28 @@ try:
 except Exception as e:
     logging.error(f"Error loading the model: {e}")
 
-past_100_days = pd.DataFrame(tr_data.tail(100))
-final_df = past_100_days.append(ts_data, ignore_index = True)
+past_100_days = pd.DataFrame(tr_data[-100:])
+final_df = past_100_days.append(pd.DataFrame(ts_data), ignore_index=True)
 input_data = scaler.fit_transform(final_df)
 x_test = []
 y_test = []
 
 for i in range(100, input_data.shape[0]):
-  x_test.append(input_data[i-100:i])
-  y_test.append(input_data[i, 0])
+    x_test.append(input_data[i-100:i])
+    y_test.append(input_data[i, 0])
 
 x_test, y_test = np.array(x_test), np.array(y_test)
 y_pred = model.predict(x_test)
-scaler.scale_
-scale_factor = 1/.00575159
-y_pred = y_pred*scale_factor
-y_test = y_test*scale_factor
+
+# Inverse transform the scaled values
+y_pred = scaler.inverse_transform(y_pred.reshape(-1, 1)).flatten()
+y_test = scaler.inverse_transform(y_test.reshape(-1, 1)).flatten()
+
+# No need to manually scale using scale_factor
+# scale_factor = 1/.00575159
+# y_pred = y_pred*scale_factor
+# y_test = y_test*scale_factor
+
 
 st.subheader('FINAL PREDICTION')
 sns.set_style({'axes.facecolor': '#E0FFFF'})
