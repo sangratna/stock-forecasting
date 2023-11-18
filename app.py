@@ -71,7 +71,17 @@ tr_data_array = scaler.fit_transform(tr_data)
 ts_data_array = scaler.fit_transform(ts_data)
 
 from keras.models import load_model
-model = load_model ('keras_model')
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
+# ...
+
+try:
+    model = load_model('keras_model')
+except Exception as e:
+    logging.error(f"Error loading the model: {e}")
+
 past_100_days = tr_data.tail(100)
 final_df = past_100_days.append(ts_data, ignore_index = True)
 input_data = scaler.fit_transform(final_df)
