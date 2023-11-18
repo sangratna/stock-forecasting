@@ -101,31 +101,31 @@ y_test = y_test*scale_factor
 
 st.subheader('FINAL PREDICTION')
 sns.set_style({'axes.facecolor': '#E0FFFF'})
-fig, ax = plt.subplots(figsize=(15, 9))
+fig2, ax2 = plt.subplots(figsize=(15, 9))
 
 
-ax.plot(y_test, c='blue', linewidth=2, label='Original price')
-ax.plot(y_pred, c='red', linewidth=2, label='Predicted price')
-ax.set_xlabel('Time', fontweight='bold', size=15)
-ax.set_ylabel('Price', fontweight='bold', size=15)
-ax.yaxis.tick_left()
-ax.xaxis.tick_bottom()
-ax.tick_params(axis='both', which='both', width=4)
-ax.spines['bottom'].set_linewidth(2)
-ax.spines['top'].set_linewidth(2)
-ax.spines['right'].set_linewidth(2)
-ax.spines['left'].set_linewidth(2)
-ax1.tick_params(axis='both', which='both', labelsize=15, colors='navy', width=2)
-ax.tick_params(axis='x', labelsize=15, labelcolor='black', width=2, which='both', direction='out')
-ax.tick_params(axis='y', labelsize=15, labelcolor='black', width=2, which='both', direction='out')
+ax2.plot(y_test, c='blue', linewidth=2, label='Original price')
+ax2.plot(y_pred, c='red', linewidth=2, label='Predicted price')
+ax2.set_xlabel('Time', fontweight='bold', size=15)
+ax2.set_ylabel('Price', fontweight='bold', size=15)
+ax2.yaxis.tick_left()
+ax2.xaxis.tick_bottom()
+ax2.tick_params(axis='both', which='both', width=4)
+ax2.spines['bottom'].set_linewidth(2)
+ax2.spines['top'].set_linewidth(2)
+ax2.spines['right'].set_linewidth(2)
+ax2.spines['left'].set_linewidth(2)
+ax2.tick_params(axis='both', which='both', labelsize=15, colors='navy', width=2)
+ax2.tick_params(axis='x', labelsize=15, labelcolor='black', width=2, which='both', direction='out')
+ax2.tick_params(axis='y', labelsize=15, labelcolor='black', width=2, which='both', direction='out')
 
-fig.patch.set_facecolor('#FBEEE6')
+fig2.patch.set_facecolor('#FBEEE6')
 
 # Add legend
-ax.legend()
+ax2.legend()
 
 # Display the plot in Streamlit
-st.pyplot(fig)
+st.pyplot(fig2)
 st.text("READ IT")
 
 # Or use markdown for more styling options
