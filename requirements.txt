@@ -2,9 +2,8 @@ numpy
 pandas
 yfinance 
 matplotlib
-streamlit 
+scikit-learn
 seaborn
 sklearn
 tensorflow
 keras
- 
