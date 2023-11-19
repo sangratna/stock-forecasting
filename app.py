@@ -77,13 +77,23 @@ ts_data_array = scaler.fit_transform(ts_data)
 
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+import os
+import zipfile
 import logging
+from keras.models import load_model
+
+# Unzip the Keras model
+with zipfile.ZipFile('keras_model.zip', 'r') as zip_ref:
+    zip_ref.extractall()
+
+# Load the Keras model
+model = load_model('keras_model')
 # try:
 #     model = load_model('keras_model')
 #     logging.info('Model loaded successfully!')
 # except Exception as e:
 #     logging.error(f"Error loading the model: {e}")
-model = load_model('keras_model')
+# model = load_model('keras_model')
 
 past_100_days = tr_data.tail(100)
 final_df = past_100_days.append(ts_data, ignore_index = True)
