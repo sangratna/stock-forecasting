@@ -6,5 +6,4 @@ streamlit
 seaborn
 scikit-learn
 tensorflow
-os
 zipfile
